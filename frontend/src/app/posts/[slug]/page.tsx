@@ -20,11 +20,6 @@ export async function generateStaticParams() {
 
     const posts = await res.json(); // 假设返回的数据是一个包含文章列表的 JSON 数组
 
-    // 检查 posts 和 posts.data 是否存在且 posts.data 是一个数组
-    if (!posts || !Array.isArray(posts.data)) {
-        console.error("Failed to fetch posts or posts.data is not an array:", posts);
-        return []; // 返回空数组，避免在 null 或非数组上调用 map
-    }
 
     // 返回所有文章的 slug，以便 Next.js 生成静态页面
     return posts.data.map((post: string) => ({
@@ -61,18 +56,14 @@ export default async function BlogPost({params}: BlogPostProps) {
     });
     const post = await res.json();
 
-    // 检查 post.code 是否为 0 并且 post.data 是否存在
-    if (post.code !== 0 || !post.data) {
-        notFound(); // 如果数据有问题，触发 notFound
+    if (post.code !== 0) {
+        notFound();
     }
-
     return (
         <div className="article-container">
-            {/* 确保 post.data 存在再传递给 ArticleView */}
             <ArticleView post={post.data}/>
             <RelatedRecommend id={slug}/>
-            {/* 确保 post.data.commentId 存在再传递给 CommentArea */}
-            {post.data.commentId && <CommentArea id={post.data.commentId}/>}
+            <CommentArea id={post.data.commentId}/>
             <FloatingMenu items={[]}/>
         </div>
     );

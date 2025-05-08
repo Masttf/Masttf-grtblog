@@ -6,13 +6,7 @@ import {ScrollArea} from "@radix-ui/themes";
 
 const RelatedRecommend = async ({id}: { id: string }) => {
     const relatedRecommend = await getRelatedArticles(id);
-
-    // 检查 relatedRecommend 是否为数组
-    if (!Array.isArray(relatedRecommend)) {
-        console.error("Related recommendations data is not an array:", relatedRecommend);
-        return null; // 或者返回一个表示没有推荐的 UI
-    }
-
+    
     return (
         <div>
             <h1 style={{
