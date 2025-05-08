@@ -166,6 +166,10 @@ export default function Toc({toc, commentId, targetId, likes, comments, type}: {
     }, [activeItemRef]);
 
     const renderTocItems = useCallback((items: TocItem[]) => {
+        // 确保 items 是一个数组
+        if (!Array.isArray(items)) {
+            return null; // 或者返回一个空数组 []
+        }
         return items.map((item, index) => (
             <motion.div
                 key={`${item.anchor}-${index}`}
@@ -190,7 +194,8 @@ export default function Toc({toc, commentId, targetId, likes, comments, type}: {
                     </a>
                 </li>
                 <AnimatePresence>
-                    {item.isSelect && item.children && item.children.length > 0 && (
+                    {/* 检查 item.children 是否存在且为数组 */}
+                    {item.isSelect && item.children && Array.isArray(item.children) && item.children.length > 0 && (
                         <motion.ul
                             initial="hidden"
                             animate="visible"

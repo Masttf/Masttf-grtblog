@@ -162,6 +162,10 @@ const FloatingTocMobile = ({toc, targetId, type}: { toc: TocItem[], targetId: st
     }, [doms, activeAnchor, debounce]);
 
     const renderTocItems = (items: TocItem[]) => {
+        // 检查 items 是否为数组
+        if (!Array.isArray(items)) {
+            return null; // 或者返回一个空数组 []，取决于期望的渲染结果
+        }
         return items.map((item, index) => (
             <motion.div
                 key={index}
@@ -172,7 +176,8 @@ const FloatingTocMobile = ({toc, targetId, type}: { toc: TocItem[], targetId: st
                 <li className={item.anchor === activeAnchor ? 'font-semibold text-primary' : 'font-normal'}>
                     <a href={`#${item.anchor}`}>{item.name}</a>
                 </li>
-                {item.children && item.children.length > 0 && (
+                {/* 检查 item.children 是否存在且为数组 */}
+                {item.children && Array.isArray(item.children) && item.children.length > 0 && (
                     <ul>
                         {renderTocItems(item.children)}
                     </ul>

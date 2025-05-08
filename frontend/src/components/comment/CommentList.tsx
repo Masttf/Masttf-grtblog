@@ -105,21 +105,29 @@ const CommentList = ({id, subComments, isModal}: { id?: string, subComments?: Co
         <div className={styles.commentListContainer} style={{
             marginLeft: id ? '0' : '3rem',
         }}>
-            {comments.map((comment, index) => {
-                if (comments.length === index + 1) {
-                    return (
-                        <div ref={lastCommentElementRef} key={isModal ? "Modal" + comment.id : comment.id}>
-                            <CommentListItem comment={comment}/>
-                        </div>
-                    );
-                } else {
-                    return <CommentListItem key={isModal ? "Modal" + comment.id : comment.id} comment={comment}/>;
-                }
-            })}
+            {/* 检查 comments 是否为数组且不为空 */}
+            {Array.isArray(comments) && comments.length > 0 ? (
+                comments.map((comment, index) => {
+                    if (comments.length === index + 1) {
+                        return (
+                            <div ref={lastCommentElementRef} key={isModal ? "Modal" + comment.id : comment.id}>
+                                <CommentListItem comment={comment}/>
+                            </div>
+                        );
+                    } else {
+                        return <CommentListItem key={isModal ? "Modal" + comment.id : comment.id} comment={comment}/>;
+                    }
+                })
+            ) : (
+                // 如果 comments 不是数组或为空，可以渲染一个空状态或者 null
+                !loading && !hasMore && (
+                     <div className="text-center text-gray-500 text-sm mt-4 mb-4"> 暂无评论 </div>
+                )
+            )}
             {loading && (
                 <CommentListSkeleton/>
             )}
-            {!hasMore && (
+            {!hasMore && Array.isArray(comments) && comments.length > 0 && (
                 <div className="text-center text-gray-500 text-sm mt-4 mb-4"> 没有更多啦，不小心让你翻到底了欸
                     〃•ω‹〃</div>
             )}
